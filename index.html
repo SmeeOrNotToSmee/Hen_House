@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bean Machine Order Calculator</title>
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/GpYqjDkb/Bean.png">
+  <title>Hen House Order Calculator</title>
   <meta name="theme-color" content="#1f2937">
   <style>
     :root {
       --brown:#6b4f3b; --tan:#d7c3a3; --cream:#f7f3ec; --ink:#1f1a17; --muted:#6a6a6a;
       --border:#e7e1d6; --shadow:0 10px 30px rgba(0,0,0,.08);
-      --bg:#faf8f3; --panel:#fff; --card:#fff; --chip:#f5efe6; --text:var(--ink); --accent:var(--brown); --radius:16px;
-      --bg-dark:#14110f; --panel-dark:#1d1916; --card-dark:#231e1a; --chip-dark:#2c2621; --text-dark:#efe9e2; --border-dark:#3b322b;
+      --bg:#FF9933; --panel:#FFF8EC; --card:#FFC680; --chip:#FBEDD8; --text:var(--ink); --accent:var(--brown); --radius:16px;
+      --bg-dark:#B35900; --panel-dark:#E6C9A0; --card-dark:#F2A65A; --chip-dark:#D9B87E; --text-dark:#1f1a17; --border-dark:#C9A76E;
     }
     [data-theme="dark"]{ --bg:var(--bg-dark); --panel:var(--panel-dark); --card:var(--card-dark); --chip:var(--chip-dark); --text:var(--text-dark); --border:var(--border-dark); }
     *{box-sizing:border-box}
@@ -35,9 +34,9 @@
     .price{color:var(--accent);font-weight:700}
     .muted{color:var(--muted);font-size:.9rem}
     .qty{display:grid;grid-template-columns:32px 1fr 32px;align-items:center;gap:8px;margin-top:6px}
-    .qty button{height:36px;border-radius:10px;border:1px solid var(--border);background:var(--chip);color:var(--text);cursor:pointer;font-size:18px}
+    .qty button{height:36px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-size:18px}
     .qty output{text-align:center}
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);background:var(--chip);color:var(--text);cursor:pointer;font-weight:600;text-decoration:none}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;font-weight:600;text-decoration:none}
     .btn.primary{background:linear-gradient(135deg,var(--brown),var(--tan));border:none;color:#fff}
     .btn.block{width:100%}
     .btn.ghost{background:transparent}
@@ -70,7 +69,7 @@
     .select-card{border:1px solid var(--border);background:var(--card);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
     .select-title{font-weight:700}
     .select-qty{display:grid;grid-template-columns:32px 1fr 32px;align-items:center;gap:8px}
-    .select-qty button{height:32px;border-radius:8px;border:1px solid var(--border);background:var(--chip)}
+    .select-qty button{height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg)}
     .ing-list{display:grid;grid-template-columns:1fr auto;gap:8px}
   </style>
 </head>
@@ -78,11 +77,11 @@
   <div class="container">
     <header>
       <div class="brand">
-        <div class="logo" aria-hidden="true" style="overflow:hidden;display:flex;align-items:center;justify-content:center;">
-          <img src="https://i.postimg.cc/GpYqjDkb/Bean.png" alt="Bean Machine logo" style="width:100%;height:100%;object-fit:contain;">
-        </div>
         <div>
-          <h1>Bean Machine Order Calculator</h1>
+          <h1 style="border:2px solid var(--border);border-radius:12px;padding:8px 16px;display:inline-flex;align-items:center;gap:10px;">
+            <img src="https://i.postimg.cc/qRF8P3gb/HH.png" alt="Hen House logo" style="height:32px;width:32px;object-fit:contain;border-radius:8px;">
+            Hen House Order Calculator
+          </h1>
           <div class="muted">Pick drinks & bakes, add deals, apply discounts, and get an exact total.</div>
         </div>
       </div>
@@ -111,11 +110,6 @@
           <div class="section">
             <h3 style="margin:0 0 8px 0">Drinks</h3>
             <button class="btn block" id="openDrinksBtn">☕ View Drinks</button>
-          </div>
-
-          <div class="section">
-            <h3 style="margin:0 0 8px 0">Ice Cream</h3>
-            <button class="btn block" id="openIceCreamBtn">🍦 View Ice Cream</button>
           </div>
 
           <div class="section">
@@ -212,16 +206,6 @@
     </div>
   </dialog>
 
-  <dialog id="iceCreamModal">
-    <div class="modal-header">
-      <strong>🍦 Ice Cream</strong>
-      <button class="btn" id="closeIceCream" aria-label="Close">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="cards" id="iceCream"></div>
-    </div>
-  </dialog>
-
   <dialog id="extrasModal">
     <div class="modal-header">
       <strong>🧁 Bakes & Treats</strong>
@@ -298,17 +282,6 @@
         { id:'sp-hay',   name:'🍰🍵🧇🍦 Hayward Special', price:1600, type:'bundle',
           description:'20 Wonder Waffles + 20 Iced Lattes + 4 Cakes of your choice + 4 Ice Creams.' },
       ],
-      iceCream: [
-        { id:'ex-ice-van',   name:'🍦 Vanilla Ice Cream',      price:70, type:'extra' },
-        { id:'ex-ice-choc',  name:'🍫🍦 Chocolate Ice Cream',    price:70, type:'extra' },
-        { id:'ex-ice-apple', name:'🍏🍦 Apple Ice Cream',        price:70, type:'extra' },
-        { id:'ex-ice-banana',name:'🍌🍦 Banana Ice Cream',       price:70, type:'extra' },
-        { id:'ex-ice-mango', name:'🥭🍦 Mango Ice Cream',        price:70, type:'extra' },
-        { id:'ex-ice-pom',   name:'❤️🍦 Pomegranate Ice Cream',  price:70, type:'extra' },
-        { id:'ex-ice-water', name:'🍉🍦 Watermelon Ice Cream',   price:70, type:'extra' },
-        { id:'ex-ice-lemon', name:'🍋🍦 Lemon Ice Cream',        price:70, type:'extra' },
-        { id:'ex-ice-straw', name:'🍓🍦 Strawberry Ice Cream',   price:70, type:'extra' },
-      ],
       extras: [
         { id:'ex-lemon',  name:'🥤 Pink Lemonade', price:50,  type:'extra', isDrink:true },
         { id:'ex-cup',    name:'🧁 Cupcake',        price:30,  type:'extra' },
@@ -332,14 +305,6 @@
       'bev-choc': {'Milk':2,'Sugar':2,'Cocoa Powder':4},
       'bev-matcha': {'Macha Powder':2,'Water':2},
       'ex-ice-van'  : {'Ice Cream Cone':1,'Milk':1},
-      'ex-ice-choc' : {'Ice Cream Cone':1,'Milk':1,'Cocoa Powder':1},
-      'ex-ice-apple': {'Ice Cream Cone':1,'Milk':1,'Apple':1},
-      'ex-ice-banana':{'Ice Cream Cone':1,'Milk':1,'Banana':1},
-      'ex-ice-mango': {'Ice Cream Cone':1,'Milk':1,'Mango':1},
-      'ex-ice-pom'  : {'Ice Cream Cone':1,'Milk':1,'Pomegranate':1},
-      'ex-ice-water': {'Ice Cream Cone':1,'Milk':1,'Watermelon':1},
-      'ex-ice-lemon': {'Ice Cream Cone':1,'Milk':1,'Lemon':1},
-      'ex-ice-straw' : {'Ice Cream Cone':1,'Milk':1,'Strawberry':2},
       'ex-cake-berry': {'Flour':1,'Sugar':1,'Milk':1,'Egg':1,'Cherry':1,'Strawberry':1},
       'ex-cake-lemon': {'Flour':1,'Sugar':1,'Milk':1,'Egg':1,'Lemon':2},
       'ex-cake-choc' : {'Flour':1,'Sugar':1,'Milk':1,'Egg':1,'Cocoa Powder':2},
@@ -347,8 +312,8 @@
 
     const currency = n => `$${n.toFixed(2)}`;
 
-    const STATE_KEY = 'beanmachine_state_v7';
-    const HIST_KEY  = 'beanmachine_history_v7';
+    const STATE_KEY = 'henhouse_state_v7';
+    const HIST_KEY  = 'henhouse_history_v7';
 
     const state = { cart:[], discountPct:0, history:[], fulfillment:'pickup', deliveryZone:'city' };
 
@@ -369,7 +334,7 @@
 
     // ---------- Helpers: lookups ----------
     function findMenuItem(id){
-      const pools = [MENU.classic,MENU.specialty,MENU.deals,MENU.packs,MENU.bundles,MENU.extras,MENU.iceCream];
+      const pools = [MENU.classic,MENU.specialty,MENU.deals,MENU.packs,MENU.bundles,MENU.extras];
       for(const pool of pools){ const f = pool.find(x=>x.id===id); if(f) return f; }
       return null;
     }
@@ -404,16 +369,14 @@
     function renderCards(){
       const classic = document.getElementById('classic');
       const mealBundles = document.getElementById('mealBundles');
-      const iceCream = document.getElementById('iceCream');
       const extras  = document.getElementById('extras');
 
       const make = arr => arr.map(cardHTML).join('');
       classic.innerHTML = make(MENU.classic);
       mealBundles.innerHTML = make(MENU.bundles.filter(i=>['bd-med','bd-large','pk-beanbox','rf-beanbox','sp-hay'].includes(i.id)));
-      iceCream.innerHTML = make(MENU.iceCream);
       extras.innerHTML  = make(MENU.extras);
 
-      const allItems = [...MENU.classic,...MENU.bundles,...MENU.extras,...MENU.iceCream];
+      const allItems = [...MENU.classic,...MENU.bundles,...MENU.extras];
 
       document.querySelectorAll('.cards .card').forEach(card=>{
         let count=1;
@@ -886,11 +849,9 @@
       wrap.innerHTML = entries.map(([n,c])=>`<div class="ing-list"><div>${n}</div><div><strong>x${c}</strong></div></div>`).join('');
     }
 
-    // ---------- Simple menu popups (Drinks / Ice Cream / Bakes & Treats) ----------
+    // ---------- Simple menu popups (Drinks / Bakes & Treats) ----------
     document.getElementById('openDrinksBtn').addEventListener('click',()=>document.getElementById('drinksModal').showModal());
     document.getElementById('closeDrinks').addEventListener('click',()=>document.getElementById('drinksModal').close());
-    document.getElementById('openIceCreamBtn').addEventListener('click',()=>document.getElementById('iceCreamModal').showModal());
-    document.getElementById('closeIceCream').addEventListener('click',()=>document.getElementById('iceCreamModal').close());
     document.getElementById('openExtrasBtn').addEventListener('click',()=>document.getElementById('extrasModal').showModal());
     document.getElementById('closeExtras').addEventListener('click',()=>document.getElementById('extrasModal').close());
 
@@ -920,13 +881,13 @@
     const themeBtn=document.getElementById('themeBtn');
     function applyTheme(t){
       document.documentElement.setAttribute('data-theme',t);
-      localStorage.setItem('beanmachine_theme',t);
+      localStorage.setItem('henhouse_theme',t);
       themeBtn.textContent=t==='dark'?'☀️ Light':'🌙 Dark';
       themeBtn.setAttribute('aria-pressed',t==='dark');
     }
-    applyTheme(localStorage.getItem('beanmachine_theme')||'dark');
+    applyTheme(localStorage.getItem('henhouse_theme')||'dark');
     themeBtn.addEventListener('click',()=>{
-      const next=(localStorage.getItem('beanmachine_theme')||'dark')==='light'?'dark':'light';
+      const next=(localStorage.getItem('henhouse_theme')||'dark')==='light'?'dark':'light';
       applyTheme(next);
     });
 
