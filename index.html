@@ -259,13 +259,6 @@
   </dialog>
 
   <script>
-    // ---------- In-memory storage shim (artifacts can't use localStorage) ----------
-    const memoryStore = {};
-    const localStorage = {
-      getItem: k => (k in memoryStore ? memoryStore[k] : null),
-      setItem: (k,v) => { memoryStore[k] = v; }
-    };
-
     // ---------- Config ----------
 
     // ---------- Data ----------
